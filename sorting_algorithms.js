@@ -1,5 +1,6 @@
 /*
 Merge Sort
+All the hard work happends in the combine step not in divide step
 Pseudocode Recursive
 Function mergeSortRecursive
 1. create a base case if an array lenght smaller or equalt than 1 return the array
@@ -37,8 +38,8 @@ Function merge
 function mergeSortRecursive(array) {
     if (array.length <= 1) return array;
 
-    var leftHalf = array.slice(0, array.length/2);
-    var rightHalf = array.slice(array.length/2);
+    var leftHalf = array.slice(0, array.length / 2);
+    var rightHalf = array.slice(array.length / 2);
 
     var leftSorted = mergeSortRecursive(leftHalf);
     var rightSorted = mergeSortRecursive(rightHalf);
@@ -47,13 +48,13 @@ function mergeSortRecursive(array) {
 }
 
 function mergeSortIterative(array) {
-    var splitArr = array.map(function(element) { return [element] });
+    var splitArr = array.map(function (element) { return [element] });
 
-    while(splitArr.length > 1) {
+    while (splitArr.length > 1) {
         var result = [];
 
-        for(var i=0; i<splitArr.length; i+=2) {
-            if (splitArr[i+1]) result.push(merge(splitArr[i], splitArr[i+1]));
+        for (var i = 0; i < splitArr.length; i += 2) {
+            if (splitArr[i + 1]) result.push(merge(splitArr[i], splitArr[i + 1]));
 
             else result.push(splitArr[i]);
         }
@@ -77,10 +78,72 @@ function merge(left, right) {
     return result;
 }
 
-mergeSortRecursive([5,2,9,1,4]);
-mergeSortIterative([5,2,9,1,4]);
+mergeSortRecursive([5, 2, 9, 1, 4]);
+mergeSortIterative([5, 2, 9, 1, 4]);
 
+/*
+Quick Sort
+All the work happens in the divide step
+Function quicksort with arguments as array, lowest number and highest number.
+- if numbers no provided assign value of lower to the 0 and highest as the last element in the array
+- if  highest is bigger than lowest do partition
+- after the partition return sorted array (left is smaller then pivot and right is bigger) do recursion quicksorf for both left and right part of the array
 
+Function partition with Lomuto scheme
+- pass to the function the array, lowest and highest numbers 
+- assign the pivot var as the element in the array with highest number
+- assign the pivot track index var to the lowest number
+- for loop with index assign to lowest, as long as index smaller than highest, add +1
+- inside the loop 
+- if array with index is <= than pivot, swap function with arguments as array, pivot track index and index
+- increment pivot track index +1
+- other cases do swap with array pivot track index and highest
+- return pivot track index
 
+Function swap
+-pass to the function array, index1 and index2
+- if i1 === i2 we return
+- assign array i2 to temporaty variable
+- assign array i2 to array i1
+- assign temp to array i2
+- return array 
+*/
 
-// Quick Sort
+function quickSort(array, lo, hi) {
+    if (lo === undefined) lo = 0;
+    if (hi === undefined) hi = array.length - 1;
+
+    if (lo < hi) {
+        var p = partition(array, lo, hi);
+        console.log('partitioning from', lo, 'to', hi, '=> partition:', p);
+
+        quickSort(array, lo, p - 1);
+        quickSort(array, p + 1, hi);
+    }
+    if (hi - lo === array.length - 1) return array;
+}
+
+function partition(arr, lo, hi) {
+    var pivot = arr[hi];
+    var pivotIndex = lo;
+
+    for (var i = lo; i < hi; i++) {
+        if (arr[i] <= pivot) {
+            swap(arr, pivotIndex, i);
+            pivotIndex++;
+        }
+    }
+    swap(arr, pivotIndex, hi);
+    return pivotIndex;
+}
+
+function swap(arr, i1, i2) {
+    if (i1 === i2) return;
+    var temp = arr[i1];
+    arr[i1] = arr[i2];
+    arr[i2] = temp;
+    console.log('swapped', arr[i1], arr[i2], 'in', arr);
+    return arr;
+}
+
+quickSort([5,9,4,7,6,2,8,3,9,1,5]);

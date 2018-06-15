@@ -1,3 +1,4 @@
+// Stack ES5
 function Stack(capacity) {
     this._capacity = capacity || Infinity;
     this._storage = {};
@@ -43,6 +44,7 @@ myStack.pop();
 myStack.peek();
 myStack.count();
 
+// Stack ES6
 class Stack {
     constructor(capacity) {
         this._capacity = capacity || Infinity;
@@ -95,6 +97,9 @@ myStack.pop();
 myStack.peek();
 myStack.count();
 
+// Implement minStack
+
+// Queue ES6
 class Queue {
     constructor(capacity) {
         this._capacity = capacity || Infinity;
@@ -157,3 +162,108 @@ myQueue.peek();
 myQueue.count();
 myQueue.contains('c');
 myQueue.until('c');
+
+/* 
+Linked List
+Comprised of nodes that represent a sequence.
+Each node is composed of data and a reference/link to the next node.
+
+1. Create Node constructor and store next and value in there
+2. Create LinkedList constructor with headValue
+- if headValue undefined throw an error
+- assign new node with headValue to the head;
+- assign tail to the head
+3. Create methods
+- forEach - invoke callback function with the value of each node
+- print - string with all values in list
+- insertAfter - insert new node associated with value passed in after refNode
+- removeAfter - remove node after the refNode
+- insertHead - insert new head node at the beginning of the list with the value passed in
+- removeHead - remove the head node of the linked list
+- findNode - first node that has a value matching what was passed in
+- appendToTail - add a new tail node at the end of the list with the associated value passed in
+*/
+function Node(value) {
+    this.next = null;
+    this.value = value;
+}
+
+function LinkedList(headValue) {
+    if (headValue === undefined) console.log('Must provide value for first node');
+    this.head = new Node(headValue);
+    this.tail = this.head;
+}
+
+LinkedList.prototype.forEach = function(callback) {
+    var node = this.head;
+    while (node) {
+        callback(node.value);
+        node = node.next;
+    }
+};
+
+LinkedList.prototype.print = function() {
+    var result = [];
+    this.forEach(function(value) {
+        result.push(value);
+    });
+    return result.join(', ');
+};
+
+LinkedList.prototype.insertAfter = function(node, value) {
+    var oldNext = node.next;
+    var newNext = new Node(value);
+    node.next = newNext;
+    newNext.next = oldNext;
+    if (this.tail === node) this.tail = newNext;
+    return newNext;   
+};
+
+LinkedList.prototype.removeAfter = function(node) {
+    var removedNode = node.next;
+    if (!removedNode) return 'Nothing to remove';
+    var newNext = removedNode.next;
+    node.next = newNext;
+    removedNode.next = null;
+    if (removedNode === this.tail) this.tail = node;
+    return removedNode;
+};
+
+LinkedList.prototype.insertHead = function(value) {
+    var newHead = new Node(value);
+    var oldHead = this.head;
+    this.head = newHead;
+    newHead.next = oldHead;
+    return this.head;
+};
+
+LinkedList.prototype.removeHead = function() {
+    var oldHead = this.head;
+    var newHead = oldHead.next;
+    this.head = newHead;
+    oldHead.next = null;
+    return oldHead;    
+};
+
+LinkedList.prototype.findNode = function(value) {
+    var node = this.head;
+    while (node) {
+        if (node.value === value) return node;
+        node = node.next;
+    }
+    return 'No node with value: ' + value + ' found.';   
+};
+
+LinkedList.prototype.appendToTail = function(value) {
+    var newTail = new Node(value);
+    this.tail.next = newTail;
+    this.tail = newTail;
+
+    return newTail;
+}
+
+var myList = new LinkedList(0);
+
+// Double Linked List
+
+// Tree
